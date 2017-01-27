@@ -5,6 +5,7 @@ AC_CONFIG_SRCDIR(src/est/est.c)
 AC_CONFIG_SRCDIR(example/client/estclient.c)
 AC_CONFIG_SRCDIR(example/client-simple/estclient-simple.c)
 AC_CONFIG_SRCDIR(example/server/estserver.c)
+AC_CONFIG_SRCDIR(example/server/estserverwrap.c)
 AC_CONFIG_SRCDIR(example/proxy/estproxy.c)
 AC_CONFIG_MACRO_DIR([m4])
 

@@ -355,6 +355,7 @@ typedef struct est_ctx EST_CTX;
 typedef EST_HTTP_AUTH_CRED_RC (*auth_credentials_cb)(EST_HTTP_AUTH_HDR *auth_credentials);
 
 
+
 /*
  * Begin the public API prototypes
  */

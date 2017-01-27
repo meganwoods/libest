@@ -404,6 +404,7 @@ int main (int argc, char **argv)
             http_auth_disable = 1;
             break;
         case 'c':
+        printf(" $$$$$  %d\n",EST_MAX_FILE_LEN );
             strncpy(certfile, optarg, EST_MAX_FILE_LEN);
             break;
         case 'k':

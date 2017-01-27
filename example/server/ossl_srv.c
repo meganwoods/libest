@@ -143,6 +143,8 @@ static BIO * ossl_get_certs_pkcs7(BIO *in);
 int parse_yesno(const char *str, int def);
 int rand_serial(BIGNUM *b, ASN1_INTEGER *ai);
 
+char *OpenSSLConfigFile;
+
 typedef struct {
     const char *name;
     unsigned long flag;
@@ -2165,6 +2167,8 @@ BIO * ossl_simple_enroll(const char *p10buf, int p10len) {
 
     /*****************************************************************/
     tofree = NULL;
+
+    if (!OpenSSLConfigFile) {
     if (configfile == NULL)
         configfile = getenv("EST_OPENSSL_CACONFIG");
     if (configfile == NULL) {
@@ -2172,6 +2176,8 @@ BIO * ossl_simple_enroll(const char *p10buf, int p10len) {
                 "\nConfig file not set, set EST_OPENSSL_CACONFIG to resolve");
         return NULL;
     }
+
+
 
     BIO_printf(bio_err, "Using configuration from %s\n", configfile);
     conf = NCONF_new(NULL);
@@ -2184,6 +2190,28 @@ BIO * ossl_simple_enroll(const char *p10buf, int p10len) {
                     errorline, configfile);
         goto err;
     }
+} else {
+        //
+        // Read config from string.
+        //
+      conf = NCONF_new(NULL);
+      BIO *mem = BIO_new(BIO_s_mem());
+      BIO_puts(mem,OpenSSLConfigFile);
+
+    if (NCONF_load_bio(conf, mem, &errorline) <= 0) {
+        BIO_free(mem);
+        if (errorline <= 0)
+            BIO_printf(bio_err, "error loading the config file from OpenSSLConfigFile '%s'\n",
+                    configfile);
+        else
+            BIO_printf(bio_err, "error on line %ld of OpenSSLConfigFile '%s'\n",
+                    errorline, configfile);
+        goto err;
+    }
+    BIO_free(mem);
+}
+
+
     if (tofree) {
         OPENSSL_free(tofree);
         tofree = NULL;

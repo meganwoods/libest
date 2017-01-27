@@ -43,8 +43,9 @@ pthread_cond_t empty;
 
 typedef void * (*thread_func_t)(void *);
 
+
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
-#define NUM_WORKER_THREADS 5
+#define NUM_WORKER_THREADS 1
 
 
 static int grab_work (int *sp)
@@ -247,6 +248,19 @@ static void catch_int(int signo)
     stop_flag = 1;
 }
 
+void stop_simple_server() {
+ stop_flag = 1;  
+
+ int cnt = 1000;
+ while(stop_flag != 2 && --cnt >0) {
+    usleep(10000); 
+ }
+
+if (cnt <=0) {
+    printf("Server did not exit gracefully (stop_simple_server in simple_server.c)\n");
+}
+
+}
 
 /*
  * This is the entry point into the Simple TCP server.
@@ -273,7 +287,7 @@ void start_simple_server (EST_CTX *ectx, int port, int delay, int v6)
     int i;
 #endif
     struct sigaction   sig_act;
-
+    stop_flag = 0;
     /*
      * Save a global reference to the context.
      * This code only supports running a single 
@@ -307,10 +321,13 @@ void start_simple_server (EST_CTX *ectx, int port, int delay, int v6)
     }    
     
 #ifndef DISABLE_PTHREADS
+    printf("Got here...");
     pthread_mutex_init(&mutex, NULL);
     pthread_cond_init(&cond, NULL);
     pthread_cond_init(&empty, NULL);
     pthread_cond_init(&full, NULL);
+
+
 
     // Start master (listening) thread
     start_thread(master_thread);
@@ -341,8 +358,5 @@ void start_simple_server (EST_CTX *ectx, int port, int delay, int v6)
 	stop_flag = 1;
     } 
 
-    while (!stop_flag) {
-        usleep(10000);	
-    }
 }
 

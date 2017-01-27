@@ -13,4 +13,6 @@
 
 BIO * ossl_simple_enroll(unsigned char *p10buf, int p10len);
 
+extern char *OpenSSLConfigFile;
+
 #endif

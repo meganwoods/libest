@@ -294,7 +294,12 @@ typedef struct est_oid_list {
 /*
  * Index used to link the EST Ctx into the SSL structures
  */
-int e_ctx_ssl_exdata_index;
+#ifdef __clang__  
+    extern int e_ctx_ssl_exdata_index;
+#else
+    int e_ctx_ssl_exdata_index;
+#endif
+
 
 
 LIBEST_TEST_API void est_log (EST_LOG_LEVEL lvl, char *format, ...);
