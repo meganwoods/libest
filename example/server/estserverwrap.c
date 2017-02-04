@@ -167,35 +167,6 @@ static void print_version (FILE *fp)
     fprintf(fp, "Using %s\n", SSLeay_version(SSLEAY_VERSION));
 }
 
-static void show_usage_and_exit (void)
-{
-    fprintf(stderr, "\nAvailable EST server options\n"
-            "  -v           Verbose operation\n"
-            "  -c <file>    PEM file to use for server cert\n"
-            "  -k <file>    PEM file to use for server key\n"
-            "  -r <value>   HTTP realm to present to clients\n"
-            "  -l           Enable CRL checks\n"
-            "  -t           Enable check for binding client PoP to the TLS UID\n"
-            "  -m <seconds> Simulate manual CA enrollment\n"
-            "  -n           Disable HTTP authentication (TLS client auth required)\n"
-            "  -o           Disable HTTP authentication when TLS client auth succeeds\n"
-            "  -h           Use HTTP Digest auth instead of Basic auth\n"
-            "  -b           Use HTTP Basic auth.  Causes explicit call to set Basic auth\n"
-        "  -p <num>     TCP port number to listen on\n"
-#ifndef DISABLE_PTHREADS
-        "  -d <seconds> Sleep timer to auto-shut the server\n"
-#endif
-        "  -f           Runs EST Server in FIPS MODE = ON\n"
-        "  -6           Enable IPv6\n"
-            "  -w           Dump the CSR to '/tmp/csr.p10' allowing for manual attribute capture on server\n"
-        "  -?           Print this help message and exit\n"
-        "  --srp <file> Enable TLS-SRP authentication of client using the specified SRP parameters file\n"
-        "  --enforce-csr  Enable CSR attributes enforcement. The client must provide all the attributes in the CSR.\n"
-        "  --token <value> Use HTTP Bearer Token auth.\n"
-            "\n");
-    exit(255);
-}
-
 #ifndef DISABLE_TSEARCH
 /*
  * The functions in this section implement a simple lookup table

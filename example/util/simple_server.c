@@ -358,5 +358,8 @@ void start_simple_server (EST_CTX *ectx, int port, int delay, int v6)
 	stop_flag = 1;
     } 
 
+    while (!stop_flag) {
+        usleep(10000);
+    }
 }
 
