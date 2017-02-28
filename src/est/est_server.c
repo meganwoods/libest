@@ -474,6 +474,7 @@ X509_REQ * est_server_parse_csr (unsigned char *pkcs10, int pkcs10_len)
     BIO *in, *b64;
     X509_REQ *req;
 
+
     /*
      * Get the original pkcs10 request from the client
      */
@@ -587,8 +588,11 @@ int est_tls_uid_auth (EST_CTX *ctx, SSL *ssl, X509_REQ *req)
          */
         tls_uid = est_get_tls_uid(ssl, 0);
         if (tls_uid) {
+             printf ("TLS:  %.*s\n",  EST_TLS_UID_LEN, tls_uid);
+             printf ("ATTR:  %.*s\n",  EST_TLS_UID_LEN, bs->data);
 	    i = memcmp_s(tls_uid, EST_TLS_UID_LEN, bs->data, EST_TLS_UID_LEN, &diff);
             if (i == EOK && !diff) {
+
                 EST_LOG_INFO("PoP is valid");
                 rv = EST_ERR_NONE;
             } else {
@@ -2150,11 +2154,17 @@ EST_ERROR est_server_set_retry_period (EST_CTX *ctx, int seconds)
         return (EST_ERR_INVALID_PARAMETERS);
     }
 
-    if (seconds < EST_RETRY_PERIOD_MIN) {
-	EST_LOG_ERR("Minimum retry-after period is %d seconds",
-		EST_RETRY_PERIOD_MIN);
+    if (seconds < 0) {
+        EST_LOG_ERR("Retry-after was less than zero seconds");
         return (EST_ERR_INVALID_PARAMETERS);
     }
+
+
+    //if (seconds < EST_RETRY_PERIOD_MIN) {
+	//EST_LOG_ERR("Minimum retry-after period is %d seconds",
+	//	EST_RETRY_PERIOD_MIN);
+    //    return (EST_ERR_INVALID_PARAMETERS);
+   // }
 
     ctx->retry_period = seconds;
     return (EST_ERR_NONE);
